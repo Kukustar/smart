@@ -111,7 +111,7 @@ def sum_linked_lists(list1, list2):
     current1 = list1.head
     current2 = list2.head
 
-    while current1 and current2:
+    while current1 is not None and current2 is not None:
         sum_value = current1.value + current2.value
         result_list.add_in_tail(Node(sum_value))
         current1 = current1.next
