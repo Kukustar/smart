@@ -73,7 +73,7 @@ class LinkedList:
                 prev = node
             node = node.next
 
-        if all and prev is not None:  # Обновление self.tail для списка, содержащего узлы
+        if all and prev is not None:
             self.tail = prev
 
     def find_all(self, val: int) -> List[Node]:
