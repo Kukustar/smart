@@ -106,11 +106,11 @@ class LinkedList:
                 self.tail = newNode
 
 
-def sum_linked_lists(list1, list2):
-    if list1.len() != list2.len():
-        return 
-
+def sum_linked_lists(list1: LinkedList, list2: LinkedList) -> LinkedList:
     result_list = LinkedList()
+    if list1.len() != list2.len():
+        return result_list
+
     current1 = list1.head
     current2 = list2.head
 
