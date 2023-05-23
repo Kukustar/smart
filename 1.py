@@ -1,7 +1,11 @@
+from typing import List
+
+
 class Node:
     def __init__(self, v):
         self.value = v
         self.next = None
+
 
 class LinkedList:
     def __init__(self):
@@ -29,10 +33,10 @@ class LinkedList:
             node = node.next
         return None
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return self.head is None
 
-    def return_all_nodes(self):
+    def return_all_nodes(self) -> List[int]:
         nodes = []
         node = self.head
         while node is not None:
@@ -46,7 +50,7 @@ class LinkedList:
         self.head = None
         self.tail = None
 
-    def delete(self, val, all=False):
+    def delete(self, val: int, all=False):
         if self.is_empty():
             return
         node = self.head
@@ -72,7 +76,7 @@ class LinkedList:
         if all and prev is not None:  # Обновление self.tail для списка, содержащего узлы
             self.tail = prev
 
-    def find_all(self, val):
+    def find_all(self, val: int) -> List[Node]:
         nodes = []
         node = self.head
         while node is not None:
@@ -81,7 +85,7 @@ class LinkedList:
             node = node.next
         return nodes
 
-    def len(self):
+    def len(self) -> int:
         length = 0
         node = self.head
         while node is not None:
@@ -89,7 +93,7 @@ class LinkedList:
             node = node.next
         return length
 
-    def insert(self, afterNode, newNode):
+    def insert(self, afterNode: Node, newNode: Node):
         if afterNode is None:
             newNode.next = self.head
             self.head = newNode

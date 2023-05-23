@@ -1,12 +1,13 @@
-class Node:
+from typing import List
 
+
+class Node:
     def __init__(self, v):
         self.value = v
         self.next = None
 
 
 class LinkedList:
-
     def __init__(self):
         self.head = None
         self.tail = None
@@ -20,24 +21,9 @@ class LinkedList:
 
     def print_all_nodes(self):
         node = self.head
-        while node != None:
+        while node is not None:
             print(node.value)
             node = node.next
-
-    def return_string_all_nodes(self):
-        if self.is_empty():
-            return ''
-        node = self.head
-        node_string = ''
-        while node != None:
-            if node != self.head:
-                node_string += ', '
-            node_string += str(node.value)
-            node = node.next
-        return node_string    
-
-    def is_empty(self):
-        return self.head is None        
 
     def find(self, val):
         node = self.head
@@ -47,61 +33,78 @@ class LinkedList:
             node = node.next
         return None
 
-    def find_all(self, val):
-        if self.is_empty():
-            return []
-        nodes = []
-        current = self.head
-        while current is not None:
-            if current.value == val:
-                nodes.append(current)
-            current = current.next
-        return nodes
+    def is_empty(self) -> bool:
+        return self.head is None
 
-    def delete(self, val, all=False):
-        if self.is_empty():
-            return
-        while self.head and self.head.value == val:
-            if not all:
-                self.head = self.head.next
-                return
-            else:
-                self.head = self.head.next
-        current = self.head
-        while current and current.next:
-            if current.next.value == val:
-                if not all:
-                    current.next = current.next.next
-                    return
-                else:
-                    current.next = current.next.next
-            else:
-                current = current.next
+    def return_all_nodes(self) -> List[int]:
+        nodes = []
+        node = self.head
+        while node is not None:
+            nodes.append(node.value)
+            node = node.next
+        return nodes
 
     def clean(self):
         if self.is_empty():
-            return 
+            return
         self.head = None
+        self.tail = None
 
-    def len(self):
-        if self.is_empty():
-            return 0
-        current = self.head
-        count = 0
-        while current:
-            count += 1
-            current = current.next
-        return count        
-
-    def insert(self, afterNode, newNode):
+    def delete(self, val: int, all=False):
         if self.is_empty():
             return
+        node = self.head
+        prev = None
+        while node is not None:
+            if node.value == val:
+                if prev is None:
+                    self.head = node.next
+                    if self.head is None:
+                        self.tail = None
+                    if not all:
+                        return
+                    else:
+                        prev.next = node.next
+                        if node.next is None:
+                            self.tail = prev
+                        if not all:
+                            return
+                        else:
+                            prev = node
+            node = node.next
+
+        if all and prev is not None:  # Обновление self.tail для списка, содержащего узлы
+            self.tail = prev
+
+    def find_all(self, val: int) -> List[Node]:
+        nodes = []
+        node = self.head
+        while node is not None:
+            if node.value == val:
+                nodes.append(node)
+            node = node.next
+        return nodes
+
+    def len(self) -> int:
+        length = 0
+        node = self.head
+        while node is not None:
+            length += 1
+            node = node.next
+        return length
+
+    def insert(self, afterNode: Node, newNode: Node):
         if afterNode is None:
             newNode.next = self.head
             self.head = newNode
-            return
-        newNode.next = afterNode.next
-        afterNode.next = newNode
+            if self.tail is None:
+                self.tail = newNode
+        else:
+            newNode.next = afterNode.next
+            afterNode.next = newNode
+            if afterNode == self.tail:
+                self.tail = newNode
+
 
 def sum_linked_lists(list1, list2):
     if list1.len() != list2.len():
