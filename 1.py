@@ -1,12 +1,9 @@
 class Node:
-
     def __init__(self, v):
         self.value = v
         self.next = None
 
-
 class LinkedList:
-    
     def __init__(self):
         self.head = None
         self.tail = None
@@ -20,24 +17,9 @@ class LinkedList:
 
     def print_all_nodes(self):
         node = self.head
-        while node != None:
+        while node is not None:
             print(node.value)
             node = node.next
-    
-    def return_string_all_nodes(self):
-        if self.is_empty():
-            return ''
-        node = self.head
-        node_string = ''
-        while node != None:
-            if node != self.head:
-                node_string += ', '
-            node_string += str(node.value)
-            node = node.next
-        return node_string    
-    
-    def is_empty(self):
-        return self.head is None        
 
     def find(self, val):
         node = self.head
@@ -47,61 +29,134 @@ class LinkedList:
             node = node.next
         return None
 
-    def find_all(self, val):
-        if self.is_empty():
-            return []
+    def is_empty(self):
+        return self.head is None
+
+    def return_all_nodes(self):
         nodes = []
-        current = self.head
-        while current is not None:
-            if current.value == val:
-                nodes.append(current)
-            current = current.next
+        node = self.head
+        while node is not None:
+            nodes.append(node.value)
+            node = node.next
         return nodes
-            
+
+    def clean(self):
+        if self.is_empty():
+            return
+        self.head = None
+        self.tail = None
+
     def delete(self, val, all=False):
         if self.is_empty():
             return
-        while self.head and self.head.value == val:
-            if not all:
-                self.head = self.head.next
-                return
-            else:
-                self.head = self.head.next
-        current = self.head
-        while current and current.next:
-            if current.next.value == val:
-                if not all:
-                    current.next = current.next.next
-                    return
+        node = self.head
+        prev = None
+        while node is not None:
+            if node.value == val:
+                if prev is None:
+                    self.head = node.next
+                    if self.head is None:
+                        self.tail = None
+                    if not all:
+                        return
                 else:
-                    current.next = current.next.next
+                    prev.next = node.next
+                    if node.next is None:
+                        self.tail = prev
+                    if not all:
+                        return
             else:
-                current = current.next
-                
-    def clean(self):
-        if self.is_empty():
-            return 
-        self.head = None
+                prev = node
+            node = node.next
+
+        if all and prev is not None:  # Обновление self.tail для списка, содержащего узлы
+            self.tail = prev
+
+    def find_all(self, val):
+        nodes = []
+        node = self.head
+        while node is not None:
+            if node.value == val:
+                nodes.append(node)
+            node = node.next
+        return nodes
 
     def len(self):
-        if self.is_empty():
-            return 0
-        current = self.head
-        count = 0
-        while current:
-            count += 1
-            current = current.next
-        return count        
+        length = 0
+        node = self.head
+        while node is not None:
+            length += 1
+            node = node.next
+        return length
 
     def insert(self, afterNode, newNode):
-        if self.is_empty():
-            return
         if afterNode is None:
             newNode.next = self.head
             self.head = newNode
-            return
-        newNode.next = afterNode.next
-        afterNode.next = newNode
+            if self.tail is None:
+                self.tail = newNode
+        else:
+            newNode.next = afterNode.next
+            afterNode.next = newNode
+            if afterNode == self.tail:
+                self.tail = newNode
+
+
+def test_delete():
+    my_list = LinkedList()
+
+    my_list.add_in_tail(Node(10))
+    my_list.add_in_tail(Node(20))
+    my_list.add_in_tail(Node(30))
+    my_list.add_in_tail(Node(20))
+    my_list.add_in_tail(Node(30))
+
+    my_list.delete(10)
+    assert my_list.return_all_nodes() == [20, 30, 20, 30]
+    my_list.delete(20, all=True)
+    assert my_list.return_all_nodes() == [30, 30]
+
+
+def test_clean():
+    my_list = LinkedList()
+
+    my_list.add_in_tail(Node(10))
+    my_list.add_in_tail(Node(20))
+    my_list.add_in_tail(Node(30))
+    my_list.add_in_tail(Node(20))
+    my_list.add_in_tail(Node(30))
+
+    my_list.clean()
+
+    assert my_list.head is None
+    assert my_list.tail is None
+
+
+def test_find_all():
+    my_list = LinkedList()
+
+    my_list.add_in_tail(Node(10))
+    my_list.add_in_tail(Node(20))
+    my_list.add_in_tail(Node(30))
+    my_list.add_in_tail(Node(20))
+    my_list.add_in_tail(Node(30))
+    
+    nodes = my_list.find_all(20)
+    assert len(nodes) == 2
+    assert nodes[0].value == 20
+    assert nodes[1].value == 20
+
+
+def test_len():
+    my_list = LinkedList()
+
+    my_list.add_in_tail(Node(10))
+    my_list.add_in_tail(Node(20))
+    my_list.add_in_tail(Node(30))
+    my_list.add_in_tail(Node(20))
+    my_list.add_in_tail(Node(30))
+    
+    assert my_list.len() == 5
 
 
 def test_insert():
@@ -123,65 +178,5 @@ def test_insert():
 
     after_node_3 = None
     my_list.insert(after_node_3, new_node_3)
-        
-    assert my_list.return_string_all_nodes() == '5, 10, 15, 20, 25, 30'
 
-
-def test_find_all():
-    my_list = LinkedList()
-
-    my_list.add_in_tail(Node(10))
-    my_list.add_in_tail(Node(20))
-    my_list.add_in_tail(Node(30))
-    my_list.add_in_tail(Node(20))
-    my_list.add_in_tail(Node(30))
-    
-    nodes = my_list.find_all(20)
-    
-    assert len(nodes) == 2
-    assert nodes[0].value == 20
-    assert nodes[1].value == 20
-        
-      
-def test_clean():
-    my_list = LinkedList()
-
-    my_list.add_in_tail(Node(10))
-    my_list.add_in_tail(Node(20))
-    my_list.add_in_tail(Node(30))
-    my_list.add_in_tail(Node(20))
-    my_list.add_in_tail(Node(30))
-    
-    my_list.clean()
-    
-    assert my_list.head is None
-           
-      
-def test_length():
-    my_list = LinkedList()
-
-    my_list.add_in_tail(Node(10))
-    my_list.add_in_tail(Node(20))
-    my_list.add_in_tail(Node(30))
-    my_list.add_in_tail(Node(20))
-    my_list.add_in_tail(Node(30))
-    
-    assert my_list.len() == 5 
-
-
-def test_delete():
-    my_list = LinkedList()
-
-    my_list.add_in_tail(Node(10))
-    my_list.add_in_tail(Node(20))
-    my_list.add_in_tail(Node(30))
-    my_list.add_in_tail(Node(20))
-    my_list.add_in_tail(Node(30))
-    
-    my_list.delete(10)
-    
-    assert my_list.return_string_all_nodes() == '20, 30, 20, 30'
-    
-    my_list.delete(20, all=True)
-    
-    assert my_list.return_string_all_nodes() == '30, 30'
+    assert my_list.return_all_nodes() == [5, 10, 15, 20, 25, 30]
