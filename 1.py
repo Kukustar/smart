@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 
 class Node:
@@ -93,7 +93,7 @@ class LinkedList:
             node = node.next
         return length
 
-    def insert(self, afterNode: Node, newNode: Node):
+    def insert(self, afterNode: Optional[Node], newNode: Node):
         if afterNode is None:
             newNode.next = self.head
             self.head = newNode
