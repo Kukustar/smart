@@ -63,7 +63,6 @@ class LinkedList2:
                 newNode.prev = self.tail
                 self.tail.next = newNode
                 self.tail = newNode
-                
         else:
             newNode.next = afterNode.next
             newNode.prev = afterNode
@@ -148,18 +147,23 @@ def test_delete():
     
 def test_insert():
     my_list = LinkedList2()
-    node = Node(10)
-    my_list.add_in_tail(Node(10))
-    my_list.add_in_tail(Node(20))
-    my_list.add_in_tail(node)
-    my_list.add_in_tail(Node(10))
-    my_list.add_in_tail(Node(10))
+    node1 = Node(10)
+    node2 = Node(20)
+    node3 = Node(30)
+    node4 = Node(40)
+    node5 = Node(50)
+    my_list.add_in_tail(node1)
+    my_list.add_in_tail(node2)
+    my_list.add_in_tail(node3)
+    my_list.add_in_tail(node4)
+    my_list.add_in_tail(node5)
+
+    assert my_list.return_all_nodes() == [10, 20, 30, 40, 50]
     
-    my_list.insert(node, Node(100))
-    
-    assert my_list.return_all_nodes() == [10, 20, 10, 100, 10, 10]
-    
-    
+    my_list.insert(node2, Node(100))
+    assert my_list.return_all_nodes() == [10, 20, 100, 30, 40, 50]
+
+
 def test_insert_when_none_node():
     my_list = LinkedList2()
     my_list.add_in_tail(Node(10))
@@ -170,7 +174,8 @@ def test_insert_when_none_node():
     my_list.insert(None, Node(100))
     assert my_list.return_all_nodes() == [10, 20, 10, 10, 100]
     
-    
+
+
 def test_insert_when_none_node_and_empty_list():
     my_list = LinkedList2()
     
