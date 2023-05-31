@@ -57,18 +57,20 @@ class LinkedList2:
     def insert(self, afterNode: Optional[Node], newNode: Optional[Node]):
         if afterNode is None:
             if self.head is None:
-                self.head = newNode
-                self.tail = newNode
+                self.add_in_tail(newNode)
             else:
                 newNode.prev = self.tail
+                newNode.next = None
                 self.tail.next = newNode
                 self.tail = newNode
         else:
-            newNode.next = afterNode.next
-            newNode.prev = afterNode
-            if afterNode.next is not None:
+            if afterNode.next is None:
+                self.add_in_tail(newNode)
+            else:
+                newNode.next = afterNode.next
+                newNode.prev = afterNode
                 afterNode.next.prev = newNode
-            afterNode.next = newNode
+                afterNode.next = newNode
             
     def return_all_nodes(self) -> List[int]:
         nodes = []
